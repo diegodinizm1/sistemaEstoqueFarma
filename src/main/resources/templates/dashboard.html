@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Farmácia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="d-flex wrapper">
+    <!-- Menu Lateral Fixo -->
+    <nav class="sidebar bg-primary text-white">
+        <div class="sidebar-header p-3 text-center">
+            <h4 class="fw-bold"><i class="bi bi-hospital-fill me-2"></i>EstoqueFarma</h4>
+        </div>
+        <ul class="nav flex-column p-2">
+            <li class="nav-item"><a class="nav-link text-white active" href="/view/dashboard"><i class="bi bi-grid-1x2-fill me-2"></i> Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/view/estoque"><i class="bi bi-box-seam-fill me-2"></i> Estoque</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/view/medicamentos"><i class="bi bi-capsule-pill me-2"></i> Medicamentos</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/view/setores"><i class="bi bi-door-open-fill me-2"></i> Setores</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/view/movimentacoes"><i class="bi bi-card-list me-2"></i> Movimentações</a></li>
+        </ul>
+        <div class="sidebar-footer p-3 mt-auto"><form th:action="@{/logout}" method="post"><button type="submit" class="btn btn-light w-100 fw-semibold"><i class="bi bi-box-arrow-left me-2"></i> Sair</button></form></div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="content-wrapper p-4">
+        <h1 class="mb-4">Dashboard</h1>
+        <div class="row g-4">
+            <!-- Cards de estatísticas que serão preenchidos pelo dashboard.js -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card dashboard-card shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="text-muted mb-1">Produtos Cadastrados</h6>
+                                <h3 class="fw-bold" id="stat-total-produtos">...</h3>
+                            </div>
+                            <div class="avatar-sm flex-shrink-0"><span class="avatar-title bg-light text-primary rounded-circle fs-3"><i class="bi bi-capsule-pill"></i></span></div>
+                        </div>
+                        <a href="/view/medicamentos" class="stretched-link mt-auto">Gerenciar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card dashboard-card shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="text-muted mb-1">Lotes Ativos em Estoque</h6>
+                                <h3 class="fw-bold" id="stat-lotes-ativos">...</h3>
+                            </div>
+                            <div class="avatar-sm flex-shrink-0"><span class="avatar-title bg-light text-primary rounded-circle fs-3"><i class="bi bi-box-seam-fill"></i></span></div>
+                        </div>
+                        <a href="/view/estoque" class="stretched-link mt-auto">Ver Estoque</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card dashboard-card shadow-sm h-100 card-alert">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="text-muted mb-1">Próximos do Vencimento</h6>
+                                <h3 class="fw-bold" id="stat-proximo-vencimento">...</h3>
+                            </div>
+                            <div class="avatar-sm flex-shrink-0"><span class="avatar-title bg-light text-danger rounded-circle fs-3"><i class="bi bi-calendar-x-fill"></i></span></div>
+                        </div>
+                        <a href="/view/estoque" class="stretched-link mt-auto">Verificar Lotes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card dashboard-card shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="text-muted mb-1">Setores Cadastrados</h6>
+                                <h3 class="fw-bold" id="stat-total-setores">...</h3>
+                            </div>
+                            <div class="avatar-sm flex-shrink-0"><span class="avatar-title bg-light text-primary rounded-circle fs-3"><i class="bi bi-door-open-fill"></i></span></div>
+                        </div>
+                        <a href="/view/setores" class="stretched-link mt-auto">Gerenciar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>
