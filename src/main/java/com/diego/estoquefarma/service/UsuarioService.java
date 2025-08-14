@@ -4,6 +4,7 @@ import com.diego.estoquefarma.dto.UsuarioCreateDTO;
 import com.diego.estoquefarma.model.Usuario;
 import com.diego.estoquefarma.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,5 +40,15 @@ public class UsuarioService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return usuarioRepository.findByLogin(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
+    }
+
+    public Usuario getUsuarioLogado() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof Usuario) {
+            return (Usuario) authentication.getPrincipal();
+        }
+
+        throw new RuntimeException("Nenhum usuário autenticado encontrado.");
     }
 }

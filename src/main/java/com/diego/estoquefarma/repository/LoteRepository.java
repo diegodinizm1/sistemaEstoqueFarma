@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface LoteRepository extends JpaRepository<Lote,Long> {
     Optional<Lote> findByMedicamentoAndNumeroLote(Medicamento medicamento, String numeroLote);
     List<Lote> findByMedicamento(Medicamento medicamento);
+    List<Lote> findByMedicamentoOrderByDataValidadeAsc(Medicamento medicamento);
 }

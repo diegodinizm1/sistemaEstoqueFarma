@@ -16,4 +16,13 @@ public class Medicamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+
+    @Column(name = "descricao_detalhada")
+    private String descricaoDetalhada;
+
+    @Column(name = "unidade_medida")
+    private String unidadeMedida;
+
+    @Column(nullable = false)
+    private boolean ativo = true;
 }

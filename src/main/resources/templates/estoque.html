@@ -69,25 +69,36 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <table class="table table-hover align-middle table-striped table-bordered table-custom-font">
-                <thead class="table-light">
-                <tr>
-                    <th>Medicamento</th>
-                    <th>Lote</th>
-                    <th>Validade</th>
-                    <th class="text-end">Quantidade</th>
-                </tr>
-                </thead>
-                <tbody id="corpo-tabela-estoque">
-                <tr th:each="item : ${itensDeEstoque}">
-                    <td th:text="${item.nomeMedicamento}"></td>
-                    <td th:text="${item.numeroLote}"></td>
-                    <td th:text="${#temporals.format(item.dataValidade, 'dd/MM/yyyy')}"></td>
-                    <td class="text-end fw-bold" th:text="${item.quantidadeDisponivel.toBigInteger()}"></td>
-                </tr>
-                <tr th:if="${itensDeEstoque.isEmpty()}">
-                    <td colspan="4" class="text-center text-muted p-4">Nenhum item em estoque.</td>
-                </tr>
-                </tbody>
+                    <thead class="table-light">
+                    <tr>
+                        <th>Medicamento</th>
+                        <th>Lote</th>
+                        <th>Validade</th>
+                        <th class="text-end">Quantidade</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody id="corpo-tabela-estoque">
+                    <tr th:each="item : ${itensDeEstoque}">
+                        <td th:text="${item.nomeMedicamento}"></td>
+                        <td th:text="${item.numeroLote}"></td>
+                        <td th:text="${#temporals.format(item.dataValidade, 'dd/MM/yyyy')}"></td>
+                        <td class="text-end fw-bold" th:text="${item.quantidadeDisponivel}"></td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-warning btn-corrigir"
+                                    data-bs-toggle="modal" data-bs-target="#correcaoModal"
+                                    th:data-id="${item.id}"
+                                    th:data-medicamento="${item.nomeMedicamento}"
+                                    th:data-lote="${item.numeroLote}"
+                                    th:data-quantidade="${item.quantidadeDisponivel}">
+                                <i class="bi bi-pencil-fill me-1"></i> Corrigir
+                            </button>
+                        </td>
+                    </tr>
+                    <tr th:if="${itensDeEstoque.isEmpty()}">
+                        <td colspan="5" class="text-center text-muted p-4">Nenhum item em estoque.</td>
+                    </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -175,6 +186,49 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="correcaoModal" tabindex="-1" aria-labelledby="correcaoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="correcaoModalLabel">
+                    <i class="bi bi-pencil-fill me-2"></i> Correção de Contagem
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-correcao">
+                    <input type="hidden" id="correcao-estoque-id">
+                    <div class="mb-3">
+                        <label for="correcao-medicamento" class="form-label">Medicamento</label>
+                        <input type="text" class="form-control" id="correcao-medicamento" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="correcao-lote" class="form-label">Lote</label>
+                        <input type="text" class="form-control" id="correcao-lote" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="correcao-quantidade-atual" class="form-label">Quantidade Atual no Sistema</label>
+                        <input type="number" class="form-control" id="correcao-quantidade-atual" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="correcao-quantidade-nova" class="form-label">Nova Quantidade Contada</label>
+                        <input type="number" step="1" class="form-control" id="correcao-quantidade-nova" required min="0">
+                    </div>
+                    <div class="mb-3">
+                        <label for="correcao-observacao" class="form-label">Observação (Motivo da correção)</label>
+                        <textarea class="form-control" id="correcao-observacao" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="btn-salvar-correcao" class="btn btn-warning">Salvar Correção</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 

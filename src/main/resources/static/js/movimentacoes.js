@@ -1,27 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
     const tabelaCorpo = document.getElementById('corpo-tabela-movimentacoes');
     const paginacaoNav = document.getElementById('paginacao-movimentacoes');
-    const btnGerarRelatorio = document.getElementById('btn-gerar-relatorio');
 
     // Elementos de filtro
     const filtroTipo = document.getElementById('filtroTipo');
     const filtroMedicamento = document.getElementById('filtroMedicamento');
     const filtroSetor = document.getElementById('filtroSetor');
-    const filtroUsuario = document.getElementById('filtroUsuario');
     const filtroDataInicio = document.getElementById('filtroDataInicio');
     const filtroDataFim = document.getElementById('filtroDataFim');
     const btnAplicarFiltros = document.getElementById('btn-aplicar-filtros');
 
+    // Elementos do modal de relatório
+    const relatorioModalElement = document.getElementById('relatorioModal');
+    const relatorioModal = new bootstrap.Modal(relatorioModalElement);
+    const dataRelatorioInput = document.getElementById('dataRelatorio');
+    const btnGerarRelatorioModal = document.getElementById('btn-gerar-relatorio-modal');
+
     // Arrays globais para armazenar os dados dos selects
     let medicamentos = [];
     let setores = [];
-    let usuarios = [];
 
     // Array global para armazenar todas as movimentações
     let movimentacoesCompletas = [];
     const itensPorPagina = 15;
 
-    // Função para renderizar uma página da tabela
+    // Função para renderizar uma página da tabela (sem alterações)
     const renderizarTabela = (movimentacoes) => {
         tabelaCorpo.innerHTML = '';
         if (movimentacoes.length === 0) {
@@ -40,15 +43,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${mov.nomeProduto}</td>
                 <td>${mov.numeroLote}</td>
                 <td><span class="fw-bold ${tipoClasse}">${tipoTexto}</span></td>
-                <td class="text-end">${mov.quantidade}</td>
+                <td class="text-end">${mov.quantidade} ${mov.unidadeMedida}</td>
                 <td>${mov.nomeUsuario}</td>
+                <td>${mov.descricao || '-'}</td>
                 <td>${mov.nomeSetorDestino || '-'}</td>
             `;
             tabelaCorpo.appendChild(tr);
         });
     };
 
-    // Função para renderizar a paginação
+    // Função para renderizar a paginação (sem alterações)
     const renderizarPaginacao = (totalItens, paginaAtual) => {
         paginacaoNav.innerHTML = '';
         const totalPaginas = Math.ceil(totalItens / itensPorPagina);
@@ -57,14 +61,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const ul = document.createElement('ul');
         ul.className = 'pagination justify-content-center mt-4';
 
-        // Botão "Anterior"
         ul.innerHTML += `
             <li class="page-item ${paginaAtual === 0 ? 'disabled' : ''}">
                 <a class="page-link" href="#" data-page="${paginaAtual - 1}">Anterior</a>
             </li>
         `;
 
-        // Botões de números de página
         for (let i = 0; i < totalPaginas; i++) {
             ul.innerHTML += `
                 <li class="page-item ${i === paginaAtual ? 'active' : ''}">
@@ -73,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         }
 
-        // Botão "Próximo"
         ul.innerHTML += `
             <li class="page-item ${paginaAtual === totalPaginas - 1 ? 'disabled' : ''}">
                 <a class="page-link" href="#" data-page="${paginaAtual + 1}">Próximo</a>
@@ -83,34 +84,27 @@ document.addEventListener('DOMContentLoaded', function() {
         paginacaoNav.appendChild(ul);
     };
 
-    // Função para aplicar os filtros e renderizar a tabela
+    // Função para aplicar os filtros e renderizar a tabela (sem alterações)
     const aplicarFiltros = (page = 0) => {
         const termoTipo = filtroTipo.value;
         const idMedicamento = filtroMedicamento.value;
         const idSetor = filtroSetor.value;
-        const idUsuario = filtroUsuario.value;
         const dataInicio = filtroDataInicio.value ? new Date(filtroDataInicio.value + 'T00:00:00') : null;
         const dataFim = filtroDataFim.value ? new Date(filtroDataFim.value + 'T23:59:59') : null;
 
-        // Encontra o nome correspondente ao ID selecionado
         const nomeMedicamentoSelecionado = idMedicamento ? medicamentos.find(m => m.id == idMedicamento)?.nome : '';
         const nomeSetorSelecionado = idSetor ? setores.find(s => s.id == idSetor)?.nome : '';
-        const nomeUsuarioSelecionado = idUsuario ? usuarios.find(u => u.id == idUsuario)?.nome : '';
 
         const movimentacoesFiltradas = movimentacoesCompletas.filter(mov => {
             const dataMovimentacao = new Date(mov.dataHora);
 
             const filtroTipo = !termoTipo || mov.tipo === termoTipo;
-            // Correção: Comparar pelo nome do medicamento
             const filtroMedicamento = !idMedicamento || mov.nomeProduto === nomeMedicamentoSelecionado;
-            // Correção: Comparar pelo nome do setor
             const filtroSetor = !idSetor || mov.nomeSetorDestino === nomeSetorSelecionado;
-            // Correção: Comparar pelo nome do usuário
-            const filtroUsuario = !idUsuario || mov.nomeUsuario === nomeUsuarioSelecionado;
             const filtroDataInicio = !dataInicio || dataMovimentacao >= dataInicio;
             const filtroDataFim = !dataFim || dataMovimentacao <= dataFim;
 
-            return filtroTipo && filtroMedicamento && filtroSetor && filtroUsuario && filtroDataInicio && filtroDataFim;
+            return filtroTipo && filtroMedicamento && filtroSetor && filtroDataInicio && filtroDataFim;
         });
 
         const inicio = page * itensPorPagina;
@@ -143,14 +137,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // Função para popular os selects de filtro
+    // Função para popular os selects de filtro (sem alterações)
     const popularSelects = async () => {
         medicamentos = await populaSelect(filtroMedicamento, '/medicamentos', 'Todos');
         setores = await populaSelect(filtroSetor, '/setores', 'Todos');
-        usuarios = await populaSelect(filtroUsuario, '/usuarios', 'Todos');
     };
 
-    // Função auxiliar para popular um <select>
+    // Função auxiliar para popular um <select> (sem alterações)
     const populaSelect = async (selectElement, endpoint, placeholder) => {
         selectElement.innerHTML = `<option value="">${placeholder}</option>`;
         try {
@@ -163,14 +156,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 option.textContent = item.nome;
                 selectElement.appendChild(option);
             });
-            return data; // Retorna os dados para serem armazenados
+            return data;
         } catch (error) {
             console.error(`Erro ao popular select do endpoint ${endpoint}:`, error);
             return [];
         }
     };
 
-    // Event listener para a paginação
+    // Event listener para a paginação (sem alterações)
     paginacaoNav.addEventListener('click', function(event) {
         event.preventDefault();
         const target = event.target;
@@ -182,32 +175,40 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Event listener para o botão de aplicar filtros
+    // Event listener para o botão de aplicar filtros (sem alterações)
     btnAplicarFiltros.addEventListener('click', () => aplicarFiltros(0));
 
-    // Event listener para o relatório
-    btnGerarRelatorio.addEventListener('click', async () => {
+    // Lógica ajustada para o botão de relatório
+    btnGerarRelatorioModal.addEventListener('click', async () => {
+        const dataSelecionada = dataRelatorioInput.value;
+        if (!dataSelecionada) {
+            alert('Por favor, selecione uma data.');
+            return;
+        }
+
         try {
-            const response = await fetch('/relatorios/saida-diaria');
+            const response = await fetch(`/relatorios/saida-diaria?data=${dataSelecionada}`);
             if (response.redirected) window.location.href = response.url;
             if (!response.ok) throw new Error('Falha ao buscar dados do relatório.');
             const dadosRelatorio = await response.json();
-            gerarPaginaDeImpressao(dadosRelatorio);
+            relatorioModal.hide();
+            gerarPaginaDeImpressao(dadosRelatorio, dataSelecionada);
+
         } catch (error) {
             console.error('Erro ao gerar relatório:', error);
             alert(error.message);
         }
     });
 
-    const gerarPaginaDeImpressao = (relatorio) => {
-        const dataHoje = new Date().toLocaleDateString('pt-BR');
+    const gerarPaginaDeImpressao = (relatorio, dataSelecionada) => {
+        const dataFormatada = new Date(dataSelecionada + 'T00:00:00').toLocaleDateString('pt-BR');
         const setores = relatorio.nomeSetores;
         const dados = relatorio.dados;
 
         let tabelaHtml = '';
 
         if (dados.length === 0) {
-            tabelaHtml = '<p class="text-center mt-4">Nenhuma saída registada hoje.</p>';
+            tabelaHtml = '<p class="text-center mt-4">Nenhuma saída registada nesta data.</p>';
         } else {
             const cabecalhoHtml = `
                 <tr>
@@ -243,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const conteudoImpressao = `
             <html>
                 <head>
-                    <title>Relatório de Saídas - ${dataHoje}</title>
+                    <title>Relatório de Saídas - ${dataFormatada}</title>
                     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
                     <style>
                         @media print { .no-print { display: none; } }
@@ -254,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </head>
                 <body>
                     <h1>Relatório de Saídas Diárias por Setor</h1>
-                    <h2>Data: ${dataHoje}</h2>
+                    <h2>Data: ${dataFormatada}</h2>
                     ${tabelaHtml}
                     <div class="mt-5 text-center no-print">
                         <button class="btn btn-primary" onclick="window.print()">Imprimir</button>

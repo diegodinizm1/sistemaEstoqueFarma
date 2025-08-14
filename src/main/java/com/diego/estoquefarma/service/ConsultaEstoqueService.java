@@ -26,15 +26,11 @@ public class ConsultaEstoqueService {
 
     @Transactional(readOnly = true)
     public List<EstoqueDTO> listarEstoqueAtual() {
-
-
         List<com.diego.estoquefarma.model.Estoque> estoqueEmEntidades =
-                estoqueRepository.findByQuantidadeDisponivelGreaterThan(BigDecimal.ZERO);
-
+                estoqueRepository.findByQuantidadeDisponivelGreaterThanOrderByLoteDataValidadeAsc(BigDecimal.ZERO);
 
         return estoqueEmEntidades.stream()
                 .map(EstoqueDTO::converter)
-                .sorted(Comparator.comparing(EstoqueDTO::dataValidade))
                 .collect(Collectors.toList());
     }
 
@@ -44,7 +40,7 @@ public class ConsultaEstoqueService {
         long lotesAtivos = estoqueRepository.countByQuantidadeDisponivelGreaterThan(0);
 
         LocalDate hoje = LocalDate.now();
-        LocalDate dataLimite = hoje.plusDays(90);
+        LocalDate dataLimite = hoje.plusDays(30);
         long proximoVencimento = estoqueRepository.countByLote_DataValidadeBetween(hoje, dataLimite);
 
         return new DashboardStatsDTO(totalProdutos, lotesAtivos, proximoVencimento, totalSetores);

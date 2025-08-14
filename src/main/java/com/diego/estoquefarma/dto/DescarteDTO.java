@@ -1,4 +1,6 @@
 package com.diego.estoquefarma.dto;
 
-public record DescarteDTO() {
-}
+public record DescarteDTO(
+        Long idEstoque,
+        String motivo
+) {}

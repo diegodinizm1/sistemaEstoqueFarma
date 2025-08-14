@@ -23,6 +23,18 @@ public class MedicamentoController {
         return medicamentoService.listarTodos();
     }
 
+    @GetMapping("/ativos")
+    public ResponseEntity<List<Medicamento>> listarAtivos() {
+        List<Medicamento> medicamentos = medicamentoService.listarMedicamentosAtivos();
+        return ResponseEntity.ok(medicamentos);
+    }
+
+    @GetMapping("/inativos")
+    public ResponseEntity<List<Medicamento>> listarInativos() {
+        List<Medicamento> medicamentos = medicamentoService.listarMedicamentosInativos();
+        return ResponseEntity.ok(medicamentos);
+    }
+
 
     @PostMapping
     public ResponseEntity<Medicamento> criarMedicamento(@RequestBody @Valid MedicamentoDTO dto) {
@@ -51,11 +63,17 @@ public class MedicamentoController {
         }
     }
 
+    @PatchMapping("/{id}/ativar")
+    public ResponseEntity<Void> ativar(@PathVariable Long id) {
+        medicamentoService.ativarMedicamento(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarMedicamento(@PathVariable Long id) {
+    public ResponseEntity<Void> inativarMedicamento(@PathVariable Long id) {
         try {
-            medicamentoService.deletar(id);
+            medicamentoService.inativarMedicamento(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();

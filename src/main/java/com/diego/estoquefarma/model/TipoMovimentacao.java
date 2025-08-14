@@ -4,5 +4,6 @@ public enum TipoMovimentacao {
     ENTRADA,
     SAIDA_SETOR,
     AJUSTE_PERDA,
-    AJUSTE_INVENTARIO
+    AJUSTE_INVENTARIO,
+    SAIDA_DESCARTE
 }

@@ -11,9 +11,11 @@ public record MovimentacaoDTO(
         LocalDateTime dataHora,
         TipoMovimentacao tipo,
         BigDecimal quantidade,
+        String unidadeMedida,
         String nomeProduto,
         String numeroLote,
         String nomeUsuario,
+        String descricao,
         String nomeSetorDestino
 ) {
     public static MovimentacaoDTO fromEntity(Movimentacao mov) {
@@ -22,9 +24,11 @@ public record MovimentacaoDTO(
                 mov.getDataHoraMovimentacao(),
                 mov.getTipoMovimentacao(),
                 mov.getQuantidade(),
+                mov.getLote().getMedicamento().getUnidadeMedida(),
                 mov.getLote().getMedicamento().getNome(),
                 mov.getLote().getNumeroLote(),
                 mov.getUsuarioResponsavel().getNomeCompleto(),
+                mov.getObservacao(),
 
                 mov.getSetorSaida() != null ? mov.getSetorSaida().getNome() : null
         );

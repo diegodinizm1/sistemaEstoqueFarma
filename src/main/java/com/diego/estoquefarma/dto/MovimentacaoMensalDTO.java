@@ -1,8 +1,10 @@
 package com.diego.estoquefarma.dto;
 
+import java.math.BigDecimal; // Importe BigDecimal
+
 public record MovimentacaoMensalDTO(
-        int ano,
-        int mes,
-        long totalEntradas,
-        long totalSaidas
+        Integer ano,
+        Integer mes,
+        BigDecimal totalEntradas,
+        BigDecimal totalSaidas
 ) {}

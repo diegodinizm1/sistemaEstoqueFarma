@@ -25,8 +25,7 @@
     <main class="content-wrapper p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Histórico de Movimentações</h1>
-            <!-- NOVO BOTÃO DE RELATÓRIO -->
-            <button class="btn btn-info text-white" id="btn-gerar-relatorio">
+            <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#relatorioModal">
                 <i class="bi bi-printer-fill me-2"></i> Levantamento Diário
             </button>
         </div>
@@ -34,7 +33,7 @@
         <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <div class="row g-3 align-items-end">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="filtroTipo" class="form-label">Tipo</label>
                         <select class="form-select" id="filtroTipo">
                             <option value="">Todos</option>
@@ -48,28 +47,24 @@
                             <option value="">Todos</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="filtroSetor" class="form-label">Setor</label>
                         <select class="form-select" id="filtroSetor">
                             <option value="">Todos</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label for="filtroUsuario" class="form-label">Usuário</label>
-                        <select class="form-select" id="filtroUsuario">
-                            <option value="">Todos</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="filtroDataInicio" class="form-label">Data Início</label>
                         <input type="date" class="form-control" id="filtroDataInicio">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="filtroDataFim" class="form-label">Data Fim</label>
                         <input type="date" class="form-control" id="filtroDataFim">
                     </div>
-                    <div class="col-md-3 d-flex align-self-end">
-                        <button class="btn btn-primary w-100" id="btn-aplicar-filtros"><i class="bi bi-funnel-fill me-2"></i> Aplicar Filtros</button>
+                    <div class="col-md-1 d-flex align-self-end">
+                        <button class="btn btn-primary w-100" id="btn-aplicar-filtros">
+                            <i class="bi bi-funnel-fill"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -86,6 +81,7 @@
                         <th>Tipo</th>
                         <th>Quantidade</th>
                         <th>Usuário</th>
+                        <th>Descrição</th>
                         <th>Setor</th>
                     </tr>
                     </thead>
@@ -99,7 +95,33 @@
         </div>
     </main>
 </div>
+
+<div class="modal fade" id="relatorioModal" tabindex="-1" aria-labelledby="relatorioModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="relatorioModalLabel">
+                    <i class="bi bi-calendar-check me-2"></i> Selecionar Data do Levantamento
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="dataRelatorio" class="form-label">Data do Levantamento</label>
+                    <input type="date" class="form-control" id="dataRelatorio" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="btn-gerar-relatorio-modal" class="btn btn-info text-white">
+                    <i class="bi bi-printer-fill me-2"></i> Gerar Relatório
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- ... scripts JS ... -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/movimentacoes.js"></script>
 </body>
 </html>

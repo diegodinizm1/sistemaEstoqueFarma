@@ -28,9 +28,16 @@
     <main class="content-wrapper p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Gerenciar Medicamentos</h1>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#medicamentoModal">
-                <i class="bi bi-plus-circle-fill me-2"></i> Novo Medicamento
-            </button>
+            <div class="d-flex align-items-center gap-2">
+                <select class="form-select" id="filtroStatusMedicamento" style="width: auto;">
+                    <option value="ativos" selected>Ativos</option>
+                    <option value="inativos">Inativos</option>
+                    <option value="todos">Todos</option>
+                </select>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#medicamentoModal">
+                    <i class="bi bi-plus-circle-fill me-2"></i> Novo Medicamento
+                </button>
+            </div>
         </div>
 
         <div class="card shadow-sm">
@@ -40,6 +47,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Nome do Medicamento</th>
+                        <th>Discriminação</th>
+                        <th>Unidade de Medida</th>
                         <th class="text-end">Ações</th>
                     </tr>
                     </thead>
@@ -70,6 +79,14 @@
                     <div class="mb-3">
                         <label for="nomeMedicamento" class="form-label">Nome do Medicamento</label>
                         <input type="text" class="form-control" id="nomeMedicamento" name="nome" required placeholder="Ex: Dipirona 500mg cx 20">
+                    </div>
+                    <div class="mb-3">
+                        <label for="discriminacaoMed" class="form-label">Descrição Detalhada (Discriminação)</label>
+                        <input type="text" class="form-control" id="discriminacaoMed" name="descricaoDetalhada" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="unidadeMedida" class="form-label">Unidade de Medida</label>
+                        <input type="text" class="form-control" id="unidadeMedida" name="unidadeMedida" required placeholder="Ex: CX, FRASCO, UNIDADE">
                     </div>
                 </form>
             </div>

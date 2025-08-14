@@ -3,6 +3,7 @@ package com.diego.estoquefarma.service;
 import com.diego.estoquefarma.dto.MedicamentoDTO;
 import com.diego.estoquefarma.model.Medicamento;
 import com.diego.estoquefarma.repository.MedicamentoRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,15 @@ public class MedicamentoService {
     @Autowired
     private MedicamentoRepository medicamentoRepository;
 
+    public List<Medicamento> listarMedicamentosAtivos() {
+        return medicamentoRepository.findAllByAtivoTrue();
+    }
+
     public Medicamento criar(MedicamentoDTO dto) {
         Medicamento med = new Medicamento();
         med.setNome(dto.nome());
+        med.setDescricaoDetalhada(dto.descricaoDetalhada());
+        med.setUnidadeMedida(dto.unidadeMedida());
         return medicamentoRepository.save(med);
     }
 
@@ -33,8 +40,22 @@ public class MedicamentoService {
         return medicamentoRepository.findByNomeContainingIgnoreCase(nome);
     }
 
-    public void deletar(Long id) {
-        medicamentoRepository.deleteById(id);
+    @Transactional
+    public void inativarMedicamento(Long id) {
+        Medicamento medicamento = medicamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Medicamento não encontrado com o ID: " + id));
+
+        medicamento.setAtivo(false);
+        medicamentoRepository.save(medicamento);
+    }
+
+    @Transactional
+    public void ativarMedicamento(Long id) {
+        Medicamento medicamento = medicamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Medicamento não encontrado com o ID: " + id));
+
+        medicamento.setAtivo(true);
+        medicamentoRepository.save(medicamento);
     }
 
     public Medicamento atualizar(Long id, @Valid MedicamentoDTO dto) {
@@ -44,6 +65,12 @@ public class MedicamentoService {
         }
         novoMedicamento.setId(id);
         novoMedicamento.setNome(dto.nome());
+        novoMedicamento.setDescricaoDetalhada(dto.descricaoDetalhada());
+        novoMedicamento.setUnidadeMedida(dto.unidadeMedida());
         return medicamentoRepository.save(novoMedicamento);
+    }
+
+    public List<Medicamento> listarMedicamentosInativos() {
+        return medicamentoRepository.findAllByAtivoFalse();
     }
 }

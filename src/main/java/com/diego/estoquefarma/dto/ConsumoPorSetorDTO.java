@@ -1,4 +1,8 @@
 package com.diego.estoquefarma.dto;
 
-public class ConsumoPorSetorDTO {
-}
+import java.math.BigDecimal;
+
+public record ConsumoPorSetorDTO(
+        String nomeSetor,
+        BigDecimal totalConsumo
+) {}
